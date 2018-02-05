@@ -1,0 +1,2 @@
+/usr/bin/ar qc libparamgl.a  CMakeFiles/paramgl.dir/src/paramgl.cpp.o CMakeFiles/paramgl.dir/src/param.cpp.o
+/usr/bin/ranlib libparamgl.a

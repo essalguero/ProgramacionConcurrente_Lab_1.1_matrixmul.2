@@ -1,0 +1,2 @@
+/usr/bin/ar qc librendercheckgl.a  CMakeFiles/rendercheckgl.dir/src/rendercheck_gl.cpp.o
+/usr/bin/ranlib librendercheckgl.a

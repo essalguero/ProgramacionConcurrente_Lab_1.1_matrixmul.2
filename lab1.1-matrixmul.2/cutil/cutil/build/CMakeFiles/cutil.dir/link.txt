@@ -1,0 +1,2 @@
+/usr/bin/ar qc libcutil.a  CMakeFiles/cutil.dir/src/bank_checker.cpp.o CMakeFiles/cutil.dir/src/cmd_arg_reader.cpp.o CMakeFiles/cutil.dir/src/cutil.cpp.o CMakeFiles/cutil.dir/src/stopwatch.cpp.o CMakeFiles/cutil.dir/src/stopwatch_linux.cpp.o CMakeFiles/cutil.dir/src/multithreading.cpp.o
+/usr/bin/ranlib libcutil.a
