@@ -54,7 +54,7 @@ matrixMul(
     const int Mh, const int Mw, const int Nw,
     const int block_size)
 {
-    const int bx = blockIdx.x;
+        const int bx = blockIdx.x;
     const int by = blockIdx.y;
 
     const int tx = threadIdx.x;
@@ -70,20 +70,34 @@ matrixMul(
     // for each thread.
     // Write the computed value to matrix P at the correct index.
     // ===================================================================
-	
-    int indX = blockIdx.x * block_size + threadIdx.x;
-    int indY = blockIdx.y * block_size + threadIdx.y;
+    int indX = bx * blockDim.x + tx;
+    int indY = by * blockDim.y + ty;
 
+    int nElementosFila = gridDim.x * blockDim.x;
+
+    /*if (threadIdx.x == 0 && threadIdx.y == 0 && blockIdx.x == 1 && blockIdx.y == 0)
+	printf("indX: %d, indY: %d, nElementosFila: %d\n", indX, indY, nElementosFila);
+    */
     for (i = 0; i < Mw; ++i)
     {
-	//Psub += M[indX][i] * N[i][indY];
-	Psub += M[blockIdx.x * block_size + i] * N[blockIdx.y * block_size + i];
-	
-	printf("Indexes -> %d %d: %d\n", blockIdx.x * block_size + i, blockIdx.y * block_size + i, indX + indY);
+//Psub += M[indX][i] * N[i][indY];
+
+        indexM = (indX * nElementosFila) + i;
+        indexN = indY + (nElementosFila * i);
+
+        Psub += M[indexM] * N[indexN];
+
+        indexP = (indX * gridDim.x * blockDim.x) + indY;
+
+        /*if (threadIdx.x == 0 && threadIdx.y == 0 && blockIdx.x == 1 && blockIdx.y == 0)
+	    //printf("Indexes -> %d %d: %d - %d\n", blockIdx.x * block_size + i, blockIdx.y * block_size + i, indexM, indexN);
+	    printf("bx: %d, by: %d, tx: %d, ty: %d, indX: %d, intY: %d, indexP: %d, indexM: %d, indexN: %d, M[indexM]: %f, N[indexN]: %f, Psub: %f\n", bx, by, tx, ty, indX, indY, indexP, indexM, indexN, M[indexM], N[indexN], Psub);*/
     }
 
 
-    P[indX + indY] = Psub;
+    P[indexP] = Psub;
+
+	//printf("Result -> Psub: %f -> P[indexP]: %f\n\n\n", P[indexP]);
 
     // End of Code Segment 5 ============================================
 }

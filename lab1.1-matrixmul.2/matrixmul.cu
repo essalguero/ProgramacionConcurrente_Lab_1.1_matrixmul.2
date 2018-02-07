@@ -186,6 +186,7 @@ runTest(int argc, char** argv)
 
     printf("  Copy host memory to device.\n");
     cudaMemcpy(deviceM, hostM, mem_size_M, cudaMemcpyHostToDevice);
+    cudaMemcpy(deviceN, hostN, mem_size_N, cudaMemcpyHostToDevice);
 
     printf("  Allocate device memory for results.\n");
     cudaMalloc((void **) &deviceP, mem_size_P);
@@ -207,7 +208,7 @@ runTest(int argc, char** argv)
     // Initialize the block and grid dimensions here
     // ================================================
 
-	printf("Ph: %d - Pw: %d\n", Ph, Pw);
+	//printf("Ph: %d - Pw: %d\n", Ph, Pw);
 
     printf("  Setup kernel execution parameters.\n");
     dim3 block(block_size, block_size);
@@ -225,7 +226,7 @@ runTest(int argc, char** argv)
     CUT_SAFE_CALL(cutStartTimer(timer_compute));
 
     // Invoke the CUDA kernel here
-    matrixMul <<<block, grid >>>(deviceP, deviceM, deviceN, Mh, Mw, Nw, block_size);
+    matrixMul <<<grid, block>>>(deviceP, deviceM, deviceN, Mh, Mw, Nw, block_size);
     cudaThreadSynchronize();
 
     // Stop the timer_compute
@@ -235,7 +236,7 @@ runTest(int argc, char** argv)
     // ===================================================================
 
     // check if kernel execution generated an error
-    //ERROR_CHECK
+    ERROR_CHECK
     CUT_CHECK_ERROR("Kernel execution failed");
 
     // ===================================================================
