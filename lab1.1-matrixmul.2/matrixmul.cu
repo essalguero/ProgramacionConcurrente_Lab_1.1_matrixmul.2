@@ -181,14 +181,14 @@ runTest(int argc, char** argv)
     CUT_SAFE_CALL(cutStartTimer(timer_memory));
 
     printf("  Allocate device memory.\n");
-    cudaMalloc((void **) deviceM, mem_size_M);
-    cudaMalloc((void **) deviceN, mem_size_N);
+    cudaMalloc((void **) &deviceM, mem_size_M);
+    cudaMalloc((void **) &deviceN, mem_size_N);
 
     printf("  Copy host memory to device.\n");
     cudaMemcpy(deviceM, hostM, mem_size_M, cudaMemcpyHostToDevice);
 
     printf("  Allocate device memory for results.\n");
-    cudaMalloc((void **) deviceP, mem_size_P);
+    cudaMalloc((void **) &deviceP, mem_size_P);
 
     CUT_SAFE_CALL(cutStopTimer(timer_memory));
 
@@ -207,9 +207,11 @@ runTest(int argc, char** argv)
     // Initialize the block and grid dimensions here
     // ================================================
 
+	printf("Ph: %d - Pw: %d\n", Ph, Pw);
+
     printf("  Setup kernel execution parameters.\n");
-    dim3 block(block_size, block_size, 1);
-    dim3 grid(block_size, block_size, 1);
+    dim3 block(block_size, block_size);
+    dim3 grid(Pw/block_size, Pw/block_size);
 
     printf("  # of threads in a block: %d x %d (%d)\n",
         block.x, block.y, block.x * block.y);
@@ -223,7 +225,7 @@ runTest(int argc, char** argv)
     CUT_SAFE_CALL(cutStartTimer(timer_compute));
 
     // Invoke the CUDA kernel here
-    //matrixMul <<<block, grid >>>(deviceP, deviceM, deviceN, Mh, Mw, Nw, block_size);
+    matrixMul <<<block, grid >>>(deviceP, deviceM, deviceN, Mh, Mw, Nw, block_size);
     cudaThreadSynchronize();
 
     // Stop the timer_compute
@@ -233,7 +235,7 @@ runTest(int argc, char** argv)
     // ===================================================================
 
     // check if kernel execution generated an error
-    ERROR_CHECK
+    //ERROR_CHECK
     CUT_CHECK_ERROR("Kernel execution failed");
 
     // ===================================================================

@@ -71,7 +71,7 @@ matrixMul(
     // Write the computed value to matrix P at the correct index.
     // ===================================================================
 	
-    /*int indX = blockIdx.x * block_size + threadIdx.x;
+    int indX = blockIdx.x * block_size + threadIdx.x;
     int indY = blockIdx.y * block_size + threadIdx.y;
 
     for (i = 0; i < Mw; ++i)
@@ -83,7 +83,7 @@ matrixMul(
     }
 
 
-    P[indX + indY] = Psub;*/
+    P[indX + indY] = Psub;
 
     // End of Code Segment 5 ============================================
 }
