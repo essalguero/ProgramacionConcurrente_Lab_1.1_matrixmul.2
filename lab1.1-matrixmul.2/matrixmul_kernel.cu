@@ -75,6 +75,8 @@ matrixMul(
 
     int nElementosFila = gridDim.x * blockDim.x;
 
+    indexP = (indX * gridDim.x * blockDim.x) + indY;
+
     /*if (threadIdx.x == 0 && threadIdx.y == 0 && blockIdx.x == 1 && blockIdx.y == 0)
 	printf("indX: %d, indY: %d, nElementosFila: %d\n", indX, indY, nElementosFila);
     */
@@ -87,7 +89,6 @@ matrixMul(
 
         Psub += M[indexM] * N[indexN];
 
-        indexP = (indX * gridDim.x * blockDim.x) + indY;
 
         /*if (threadIdx.x == 0 && threadIdx.y == 0 && blockIdx.x == 1 && blockIdx.y == 0)
 	    //printf("Indexes -> %d %d: %d - %d\n", blockIdx.x * block_size + i, blockIdx.y * block_size + i, indexM, indexN);
